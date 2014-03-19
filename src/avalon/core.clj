@@ -25,29 +25,39 @@
   {:players [1,2,3,4,5]
    :player-roles {1 :loyal-servant 2 :minion-mordred 3 :loyal-servant 4 :merlin 5 :minion-mordred}
    :rounds {0 {:select-team [select-team select-team]
-                :mission mission}}})
+               :mission mission}}})
 
-(defn current-round [state]
+(defn current-phase [state]
+  )
+
+(defn current-round-index [state]
   (apply max (keys (:rounds state))))
 
-(defn done-voting-for-team [state]
-  (= (count (:votes (last (get-in state [:rounds (current-round state) :select-team])))) (count (:players state))))
+(defn current-round [state]
+  (get-in state [:rounds (current-round-index state)]))
 
-(done-voting-for-team state)
+(defn current-team-selection [round]
+  (last (:select-team round)))
+
+(defn current-team-selection-index [round]
+  (dec (count  (:select-team round))))
+
+(defn done-voting-for-team? [state]
+  (= (count (:votes (current-team-selection state)))
+     (count (:players state))))
+
+(defn update-current-team-vote [state votemap]
+  (assoc-in state [:rounds
+                   (current-round-index state)
+                   :select-team
+                   (current-team-selection-index (current-round state))
+                   :votes]
+            votemap))
+
 
 (defn vote-for-team [state player-id vote]
-  (let [current-round (current-round state)
-        teams (:select-team (get (:rounds state) current-round))
-        team-index (- (count teams) 1)
-        votes (:votes (get teams team-index))
-        newstate (assoc-in state
-                           [:rounds
-                            current-round
-                            :select-team
-                            team-index]
-                           (assoc votes player-id vote))]
-    (if (done-voting-for-team newstate)
-      ())))
+  (update-current-team-vote
+   state (assoc (:votes (current-team-selection (current-round state))) player-id vote)))
 
 (vote-for-team state 5 true)
 
