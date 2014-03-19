@@ -28,7 +28,8 @@
                :mission mission}}})
 
 (defn current-phase [state]
-  )
+  {:round (current-round-index state)
+   :phase (if (done-voting-for-team? state) :mission :select-team)})
 
 (defn current-round-index [state]
   (apply max (keys (:rounds state))))
