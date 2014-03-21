@@ -40,6 +40,9 @@
 (defn current-team-selection [round]
   (last (:select-team round)))
 
+(defn current-mission [round]
+  (:mission round))
+
 (defn current-team-selection-index [round]
   (dec (count  (:select-team round))))
 
@@ -55,11 +58,24 @@
                    :votes]
             votemap))
 
+(defn update-current-mission [state votemap]
+      (assoc-in state [:rounds
+                       (current-round-index state)
+                       :mission
+                       :votes]
+                votemap))
+
 
 (defn vote-for-team [state player-id vote]
   (update-current-team-vote
    state (assoc (:votes (current-team-selection (current-round state))) player-id vote)))
 
+(defn vote-for-mission [state player-id vote]
+   (update-current-mission
+   state (assoc (:votes (current-mission (current-round state))) player-id vote)))
+
 (vote-for-team state 5 true)
+(vote-for-mission state 5 false)
+
 
 
