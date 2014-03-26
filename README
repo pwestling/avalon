@@ -4,7 +4,11 @@ FIXME: write description
 
 ## Usage
 
-FIXME: write
+Run the following:
+1. lein deps
+2. lein repl
+3. (use 'avalon.server)
+4. (boot <port>)
 
 ## License
 
