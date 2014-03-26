@@ -4,7 +4,7 @@
 (defn handler [request]
   {:status 200
    :headers {"Content-Type" "text/plain"}
-   :body "Hello World!"})
+   :body "Welcome to Avalon"})
 
 (defn boot [port]
   (run-jetty handler {:port port}))
