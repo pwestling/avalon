@@ -25,7 +25,7 @@
   {:players [1,2,3,4,5]
    :player-roles {1 :loyal-servant 2 :minion-mordred 3 :loyal-servant 4 :merlin 5 :minion-mordred}
    :rounds {0 {:select-team [select-team select-team]
-               :mission mission}}})
+               :mission {:votes {3 false}}}}})
 
 (defn current-phase [state]
   {:round (current-round-index state)
@@ -59,23 +59,29 @@
             votemap))
 
 (defn update-current-mission [state votemap]
-      (assoc-in state [:rounds
-                       (current-round-index state)
-                       :mission
-                       :votes]
-                votemap))
+  (assoc-in state [:rounds
+                   (current-round-index state)
+                   :mission
+                   :votes]
+            votemap))
 
+
+(defn valid-to-vote-for-team [state player-id]
+  (and (= (:phase (current-phase state)) :select-team)
+       (:votes (current-team-selection (current-round state)))))
 
 (defn vote-for-team [state player-id vote]
   (update-current-team-vote
    state (assoc (:votes (current-team-selection (current-round state))) player-id vote)))
 
 (defn vote-for-mission [state player-id vote]
-   (update-current-mission
+  (update-current-mission
    state (assoc (:votes (current-mission (current-round state))) player-id vote)))
 
 (vote-for-team state 5 true)
 (vote-for-mission state 5 false)
+
+
 
 
 
