@@ -2,6 +2,10 @@
   :description "FIXME: write description"
   :dependencies
     [[org.clojure/clojure "1.5.1"]
-     [ring/ring-jetty-adapter "1.1.6"]]
-  :dev-dependencies
-    [[ring/ring-devel "0.2.0"]])
+     [compojure "1.1.6"]]
+  :plugins
+    [[lein-ring "0.8.10"]]
+  :ring {:handler avalon.handler/app}
+  :profiles
+    {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+                        [ring-mock "0.1.5"]]}})
