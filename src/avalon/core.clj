@@ -94,11 +94,14 @@
 (defn update-current-mission [state func]
   (update-mission state (current-round-index state) func))
 
+(defn new-round [state]
+  (update-round state (inc (current-round-index state)) (constantly {})))
+
 (defn new-team-vote [state]
   (let [leader (next-player state (current-leader state))]
     (update-current-round
      state
-     (fn [round] (update-in round [:select-team] #(conj % {:leader leader}))))))
+     (fn [round] (update-in round [:select-team] #(vec (conj % {:leader leader})))))))
 
 (defn vote-in [m player-id vote]
   (update-in m [:votes] #(assoc % player-id vote)))
@@ -111,12 +114,23 @@
   (update-current-mission
    state #(vote-in % player-id vote)))
 
+(defn propose-team [state player-id team]
+  (update-current-team-selection state #(assoc % :proposed-team team)))
+
+(defn resolve-team-selection [state ])
+
 (vote-for-team state 5 true)
 (vote-for-mission state 5 false)
 
 (valid-to-vote-for-team state 5)
 
 
+
 (-> {:players [1,2] :player-roles {1 :loyal-servant 2 :minion-mordred}}
-    )
+    (new-round)
+    (new-team-vote)
+    (propose-team 1 [1])
+    (vote-for-team 1 true)
+    (vote-for-team 2 false))
+
 
