@@ -29,6 +29,11 @@
 
 ;Informational Functions
 
+(defn half [x]
+  (/ x 2))
+
+(defn sum [coll] (reduce + coll))
+
 (defn current-round-index [state]
   (apply max (conj (keys (:rounds state)) -1)))
 
@@ -36,18 +41,21 @@
 (defn current-round [state]
   (get-in state [:rounds (current-round-index state)]))
 
-(defn current-team-selection [round]
-  (last (:select-team round)))
+(defn current-team-selection [state]
+  (last (:select-team (current-round state))))
 
 (defn current-mission [round]
   (:mission round))
 
-(defn current-team-selection-index [round]
-  (dec (count  (:select-team round))))
+(defn current-team-selection-index [state]
+  (dec (count  (:select-team (current-round state)))))
+
+(defn num-players [state]
+  (count (:players state)))
 
 (defn done-voting? [state votes]
   (= (count votes)
-     (count (:players state))))
+     (num-players state)))
 
 (defn done-voting-for-team? [state]
   (done-voting? state (:votes (current-team-selection state))))
@@ -56,11 +64,21 @@
   (done-voting? state (:votes (current-mission state))))
 
 (defn current-leader [state]
-  (:leader (current-team-selection (current-round state))))
+  (:leader (current-team-selection state)))
 
 (defn valid-to-vote-for-team [state player-id]
   (and (= (:phase (current-phase state)) :select-team)
-       (= nil (get (:votes (current-team-selection (current-round state))) player-id))))
+       (= nil (get (:votes (current-team-selection state)) player-id))))
+
+(defn vote-passed [threshold state votemap]
+  (< threshold (count (filter #(= true (second %)) votemap))))
+
+
+(defn team-vote-passed? [state votemap]
+  (vote-passed (half (num-players state)) state votemap))
+
+(defn mission-vote-passed? [state votemap]
+  (vote-passed (dec (count (:team (current-mission state)))) state votemap))
 
 (defn current-phase [state]
   {:round (current-round-index state)
@@ -89,7 +107,7 @@
   (update-in state [:rounds round-index :mission] func))
 
 (defn update-current-team-selection [state func]
-  (update-team-selection state (current-round-index state) (current-team-selection-index (current-round state)) func))
+  (update-team-selection state (current-round-index state) (current-team-selection-index state) func))
 
 (defn update-current-mission [state func]
   (update-mission state (current-round-index state) func))
@@ -102,6 +120,10 @@
     (update-current-round
      state
      (fn [round] (update-in round [:select-team] #(vec (conj % {:leader leader})))))))
+
+(defn new-mission [state]
+  (let [team (:proposed-team (current-team-selection state))]
+    (update-current-mission state (constantly {:team team}))))
 
 (defn vote-in [m player-id vote]
   (update-in m [:votes] #(assoc % player-id vote)))
@@ -117,12 +139,24 @@
 (defn propose-team [state player-id team]
   (update-current-team-selection state #(assoc % :proposed-team team)))
 
-(defn resolve-team-selection [state ])
+(defn resolve-team-selection [state]
+  (if (done-voting-for-team? state)
+    (if (team-vote-passed state (:votes (current-team-selection state)))
+      (new-mission state)
+      (new-team-vote state))
+    state))
 
-(vote-for-team state 5 true)
-(vote-for-mission state 5 false)
+(defn resolve-mission [state]
+  (if (done-voting-for-mission? state)
+    (if (team-vote-passed state (:votes (current-team-selection state)))
+      (new-mission state)
+      (new-team-vote state))
+    state))
 
-(valid-to-vote-for-team state 5)
+;(vote-for-team state 5 true)
+;(vote-for-mission state 5 false)
+
+;(valid-to-vote-for-team state 5)
 
 
 
@@ -131,6 +165,13 @@
     (new-team-vote)
     (propose-team 1 [1])
     (vote-for-team 1 true)
-    (vote-for-team 2 false))
+    (vote-for-team 2 false)
+    (resolve-team-selection)
+    (propose-team 2 [2])
+    (vote-for-team 1 true)
+    (vote-for-team 2 true)
+    (resolve-team-selection)
+    (vote-for-mission 2 true)
+    (mission-vote-passed))
 
 
