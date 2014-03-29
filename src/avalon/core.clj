@@ -25,13 +25,18 @@
   {:players [1,3,2,5,4]
    :player-roles {1 :loyal-servant 2 :minion-mordred 3 :loyal-servant 4 :merlin 5 :minion-mordred}
    :rounds {0 {:select-team [select-team select-team]
-               :mission {:votes {3 false}}}}})
+               :mission {:votes {3 true}}}}})
 
-;Informational Functions
+;util
+
+(defn map-values [func m]
+  (map #(func (second %)) m))
 
 (defn half [n] (/ n 2))
 
 (defn sum [coll] (reduce + coll))
+
+;Informational functions
 
 (defn current-round-index [state]
   (apply max (conj (keys (:rounds state)) -1)))
@@ -68,20 +73,55 @@
 (defn vote-passed [threshold state votemap]
   (< threshold (count (filter #(= true (second %)) votemap))))
 
-
 (defn team-vote-passed? [state]
   (vote-passed (half (num-players state)) state (:votes (current-team-selection state))))
 
-(defn mission-vote-passed? [state]
-  (vote-passed (dec (count (:team (current-mission state)))) state (:votes (current-mission state))))
-
 (defn current-phase [state]
-  {:round (current-round-index state)
-   :phase (if (done-voting-for-team? state) :mission :select-team)})
+  (let [round-index (current-round-index state)
+        round (current-round state)
+        team-select (current-team-selection state)]
+    (cond
+     (done-with-missions? state) :merlin-guess
+     (:mission round) :mission
+     (:proposed-team team-select):team-vote
+     :else :propose-team )))
 
-(defn valid-to-vote-for-team [state player-id]
-  (and (= (:phase (current-phase state)) :select-team)
+(defn valid-to-vote-for-team? [state player-id]
+  (and (= (current-phase state) :team-vote)
        (= nil (get (:votes (current-team-selection state)) player-id))))
+
+(defn valid-to-vote-for-mission? [state player-id]
+  (and (= (current-phase state) :mission)
+       (= nil (get (:votes (current-mission state)) player-id))
+       (some #(= player-id %)(:team (current-mission state)))))
+
+(defn valid-to-propose-team? [state player-id]
+  (and (= (current-phase state) :propose-team)
+       (= player-id (current-leader state))))
+
+(defn valid-to-guess-merlin? [state player-id]
+  (and (= (current-phase state) :merlin-guess)
+       (= :assassin (get (:player-roles state) player-id))))
+
+(defn mission-failed? [mission]
+  (and (some #(= false (second %)) (:votes mission))
+       (= (count (:team mission)) (count (:votes mission)))))
+
+(defn mission-passed? [mission]
+  (and (not-any? #(= false (second %)) (:votes mission))
+       (= (count (:team mission)) (count (:votes mission)))))
+
+(defn mission-count [func state]
+  (count (filter func (remove nil? (map-values :mission (:rounds state))))))
+
+(defn mission-winner [state]
+  (cond (< 2 (mission-count mission-passed? state)) :good
+        (< 2 (mission-count mission-passed? state)) :evil
+        :else nil))
+
+(defn done-with-missions? [state]
+  (or (= 5 (current-round-index state))
+      (mission-winner state)))
 
 ;New State functions
 
@@ -112,7 +152,7 @@
   (update-mission state (current-round-index state) func))
 
 (defn new-round [state]
-  (update-round state (inc (current-round-index state)) (constantly {})))
+  (update-round state (inc (current-round-index state)) (constantly {:select-team [{:leader (next-player state (current-leader state))}]})))
 
 (defn new-team-vote [state]
   (let [leader (next-player state (current-leader state))]
@@ -130,6 +170,9 @@
 (defn propose-team [state player-id team]
   (update-current-team-selection state #(assoc % :proposed-team team)))
 
+(defn guess-merlin [state player-id merlin]
+  (assoc state :merlin-guess player-id))
+
 (defn resolve-team-selection [state]
   (if (done-voting-for-team? state)
     (if (team-vote-passed? state)
@@ -138,7 +181,8 @@
     state))
 
 (defn resolve-mission [state]
-  (if (done-voting-for-mission? state)
+  (if (and (not (done-with-missions? state))
+           (done-voting-for-mission? state))
     (new-round state)
     state))
 
