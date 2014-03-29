@@ -29,8 +29,7 @@
 
 ;Informational Functions
 
-(defn half [x]
-  (/ x 2))
+(defn half [n] (/ n 2))
 
 (defn sum [coll] (reduce + coll))
 
@@ -44,8 +43,8 @@
 (defn current-team-selection [state]
   (last (:select-team (current-round state))))
 
-(defn current-mission [round]
-  (:mission round))
+(defn current-mission [state]
+  (:mission (current-round state)))
 
 (defn current-team-selection-index [state]
   (dec (count  (:select-team (current-round state)))))
@@ -53,36 +52,36 @@
 (defn num-players [state]
   (count (:players state)))
 
-(defn done-voting? [state votes]
+(defn done-voting? [state thresh votes]
   (= (count votes)
-     (num-players state)))
+     thresh))
 
 (defn done-voting-for-team? [state]
-  (done-voting? state (:votes (current-team-selection state))))
+  (done-voting? state (num-players state)(:votes (current-team-selection state))))
 
 (defn done-voting-for-mission? [state]
-  (done-voting? state (:votes (current-mission state))))
+  (done-voting? state (count (:team (current-mission state)))(:votes (current-mission state))))
 
 (defn current-leader [state]
   (:leader (current-team-selection state)))
-
-(defn valid-to-vote-for-team [state player-id]
-  (and (= (:phase (current-phase state)) :select-team)
-       (= nil (get (:votes (current-team-selection state)) player-id))))
 
 (defn vote-passed [threshold state votemap]
   (< threshold (count (filter #(= true (second %)) votemap))))
 
 
-(defn team-vote-passed? [state votemap]
-  (vote-passed (half (num-players state)) state votemap))
+(defn team-vote-passed? [state]
+  (vote-passed (half (num-players state)) state (:votes (current-team-selection state))))
 
-(defn mission-vote-passed? [state votemap]
-  (vote-passed (dec (count (:team (current-mission state)))) state votemap))
+(defn mission-vote-passed? [state]
+  (vote-passed (dec (count (:team (current-mission state)))) state (:votes (current-mission state))))
 
 (defn current-phase [state]
   {:round (current-round-index state)
    :phase (if (done-voting-for-team? state) :mission :select-team)})
+
+(defn valid-to-vote-for-team [state player-id]
+  (and (= (:phase (current-phase state)) :select-team)
+       (= nil (get (:votes (current-team-selection state)) player-id))))
 
 ;New State functions
 
@@ -128,6 +127,21 @@
 (defn vote-in [m player-id vote]
   (update-in m [:votes] #(assoc % player-id vote)))
 
+(defn propose-team [state player-id team]
+  (update-current-team-selection state #(assoc % :proposed-team team)))
+
+(defn resolve-team-selection [state]
+  (if (done-voting-for-team? state)
+    (if (team-vote-passed? state)
+      (new-mission state)
+      (new-team-vote state))
+    state))
+
+(defn resolve-mission [state]
+  (if (done-voting-for-mission? state)
+    (new-round state)
+    state))
+
 (defn vote-for-team [state player-id vote]
   (update-current-team-selection
    state #(vote-in % player-id vote)))
@@ -135,29 +149,6 @@
 (defn vote-for-mission [state player-id vote]
   (update-current-mission
    state #(vote-in % player-id vote)))
-
-(defn propose-team [state player-id team]
-  (update-current-team-selection state #(assoc % :proposed-team team)))
-
-(defn resolve-team-selection [state]
-  (if (done-voting-for-team? state)
-    (if (team-vote-passed state (:votes (current-team-selection state)))
-      (new-mission state)
-      (new-team-vote state))
-    state))
-
-(defn resolve-mission [state]
-  (if (done-voting-for-mission? state)
-    (if (team-vote-passed state (:votes (current-team-selection state)))
-      (new-mission state)
-      (new-team-vote state))
-    state))
-
-;(vote-for-team state 5 true)
-;(vote-for-mission state 5 false)
-
-;(valid-to-vote-for-team state 5)
-
 
 
 (-> {:players [1,2] :player-roles {1 :loyal-servant 2 :minion-mordred}}
@@ -172,6 +163,6 @@
     (vote-for-team 2 true)
     (resolve-team-selection)
     (vote-for-mission 2 true)
-    (mission-vote-passed))
+    (resolve-mission))
 
 
