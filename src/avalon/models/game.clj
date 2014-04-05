@@ -1,9 +1,12 @@
 (ns avalon.models.game)
 
-(defn all []
-  (let [] [{ :name "liveramp" }]))
-
-(defn find-game [name]
+(def GAME1
   {:name "LiveRamp"
    :stage :propose
    :players [["Takashi" 2] ["Chris" 3] ["Porter" 4] ["Jacob" 1]]})
+
+(defn all []
+  (let [] [GAME1]))
+
+(defn find-game [name]
+  (let [] GAME1))
