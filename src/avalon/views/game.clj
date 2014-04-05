@@ -2,6 +2,7 @@
   (:use hiccup.core hiccup.form avalon.views.layout))
 
 (declare propose)
+(declare vote)
 
 (defn newg []
   (layout
@@ -37,7 +38,8 @@
 
 (defn show [game-state]
   (case (:stage game-state)
-    :propose (propose game-state)))
+    :propose (propose game-state)
+    :vote (vote game-state)))
 
 (defn propose [game-state]
   (let
@@ -51,3 +53,20 @@
             (select-options players)]
           [:br]
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
+
+(defn vote [game-state]
+  (let
+    [team (:team game-state)]
+    (layout
+      [:div
+        [:h3 { :style "text-align:center" } "Proposed Team"]
+        [:div.list-group
+          (for [player team]
+            [:div.list-group-item (first player)])]
+        [:div.row { :style "text-align:center" }
+          (form-to { :class "col-xs-6" } [:post "/vote"]
+            (hidden-field :pass true)
+            [:button.btn.btn-success.btn-block "Support"])
+          (form-to  { :class "col-xs-6" } [:post "/vote"]
+            (hidden-field :pass true)
+            [:button.btn.btn-warning.btn-block "Reject"])]])))
