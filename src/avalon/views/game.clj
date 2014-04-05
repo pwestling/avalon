@@ -1,6 +1,8 @@
 (ns avalon.views.game
   (:use hiccup.core hiccup.form avalon.views.layout))
 
+(declare propose)
+
 (defn newg []
   (layout
     [:body
@@ -22,3 +24,19 @@
           (check-box :oberon)]
         [:div
           (submit-button "Submit")])]))
+
+(defn show [game-state]
+  (case (:stage game-state)
+    :propose (propose game-state)))
+
+(defn propose [game-state]
+  (let
+    [players (:players game-state)]
+    (layout
+      [:body
+        [:div "Propose a team:"]
+        (form-to [:post "/propose"]
+          [:select
+            { :multiple true :name :team }
+            (select-options players)]
+          (submit-button "Propose"))])))

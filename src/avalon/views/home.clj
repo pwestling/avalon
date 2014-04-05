@@ -8,6 +8,6 @@
       [:ul
       (for [g current-games]
         [:li
-          [:a { :href (str "/join/" (g :name)) } (g :name)]])
+          [:a { :href (str "/game/" (g :name)) } (g :name)]])
       [:div
         [:a {:href "/new"} "Create a game"]]]]))

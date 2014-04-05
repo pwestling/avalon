@@ -1,9 +1,12 @@
 (ns avalon.controllers.game
   (:use compojure.core ring.util.response)
-  (:require [avalon.views.game :as view]))
+  (:require [avalon.views.game :as view]
+            [avalon.models.game :as game]))
 
 (defn show [game-name]
-  (str "Welcome to game: " game-name "!"))
+  (let
+    [game-state (game/find-game game-name)]
+    (view/show game-state)))
 
 (defn newg [] (view/newg))
 
