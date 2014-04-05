@@ -43,10 +43,11 @@
   (let
     [players (:players game-state)]
     (layout
-      [:body
-        [:div "Propose a team:"]
+      [:div
+        [:h3 { :style "text-align:center" } "Team Selection"]
         (form-to [:post "/propose"]
-          [:select
+          [:select.form-control
             { :multiple true :name :team }
             (select-options players)]
-          (submit-button "Propose"))])))
+          [:br]
+          (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
