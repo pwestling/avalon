@@ -194,7 +194,6 @@
   (update-current-mission
    state #(vote-in % player-id vote)))
 
-
 (-> {:players [1,2] :player-roles {1 :loyal-servant 2 :minion-mordred}}
     (new-round)
     (new-team-vote)
@@ -208,5 +207,3 @@
     (resolve-team-selection)
     (vote-for-mission 2 true)
     (resolve-mission))
-
-

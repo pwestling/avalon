@@ -1,7 +1,7 @@
-(ns avalon.views.home)
-(use 'hiccup.core)
+(ns avalon.views.home
+  (:use hiccup.core))
 
-(defn home [current-games]
+(defn index [current-games]
   (html
     [:body
       "Welcome to Avalon! Here are some games you can join:"

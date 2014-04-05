@@ -1,7 +1,7 @@
-(ns avalon.views.login)
-(use 'hiccup.core 'hiccup.form)
+(ns avalon.views.login
+  (:use hiccup.core hiccup.form))
 
-(defn login []
+(defn index []
   (html
     [:body
       (form-to [:post "/login"]

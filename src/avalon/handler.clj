@@ -1,18 +1,20 @@
 (ns avalon.handler
-  (:use compojure.core
-        avalon.controller)
+  (:use compojure.core)
   (:require [compojure.handler :as handler]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [avalon.controllers.home :as home]
+            [avalon.controllers.game :as game]
+            [avalon.controllers.login :as login]))
 
 (defroutes app-routes
-  (GET "/" {session :session} (home session))
+  (GET "/" {session :session} (home/index session))
 
-  (GET "/login" [] (login-page))
-  (POST "/login" [name :as request] (login name request))
+  (GET "/login" [] (login/index))
+  (POST "/login" [name :as request] (login/create name request))
 
-  (GET "/new" [] (new-game))
-  (POST "/create" request (create-game request)) ;figure out how to destructure the origin url
-  (GET "/join/:name" [name] (game name))
+  (GET "/new" [] (game/newg))
+  (POST "/create" request (game/create request)) ;figure out how to destructure the origin url
+  (GET "/join/:name" [name] (game/show name))
 
   (route/resources "/")
   (route/not-found "Not Found"))
