@@ -7,7 +7,7 @@
 (defn index []
   (view/index))
 
-(defn create [request name]
+(defn create [name request]
   (let
     [origin (get (:headers request) "origin")]
     (update-name name)
