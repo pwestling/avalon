@@ -3,7 +3,7 @@
 
 (defn index []
   (layout
-    [:body
+    [:div
       (form-to [:post "/login"]
         [:div
           (label :name "Name")

@@ -5,7 +5,7 @@
 
 (defn newg []
   (layout
-    [:body
+    [:div
       (form-to [:post "/create"]
         [:div
           (label :name "Name of game")

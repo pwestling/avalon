@@ -3,7 +3,7 @@
 
 (defn index [current-games]
   (layout
-    [:body
+    [:div
       "Welcome to Avalon! Here are some games you can join:"
       [:ul
       (for [g current-games]
