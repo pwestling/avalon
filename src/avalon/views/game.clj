@@ -8,22 +8,32 @@
     [:div
       (form-to [:post "/create"]
         [:div
-          (label :name "Name of game")
-          (text-field :name)]
+          (text-field { :placeholder "Name" :class "form-control" } :name)]
+        [:br]
+        [:div (label :num-players "Number of players")]
         [:div
-          (label :num-players "Number of players")
-          (text-field :num-players)]
+          [:select
+            { :name :num-players :class "form-control" }
+            (select-options [1, 2, 3, 4, 5, 6])]]
+        [:br]
+;        [:div
+;          { :class "btn-group btn-group" :data-toggle "buttons-checkbox" }
+;          [:button { :type "button" :class "btn btn-default" } "Percival" ]
+;          [:button { :type "button" :class "btn btn-default" } "Morgana" ]
+;          [:button { :type "button" :class "btn btn-default" } "Oberon" ]]
+        [:div.row
+          [:div.col-xs-4
+            (label :percival "Percival")
+            (check-box { :class "form-control" } :percival)]
+          [:div.col-xs-4 ;add validation to prevent morgana when percival isn't present
+            (label :morgana "Morgana")
+            (check-box { :class "form-control" } :morgana)]
+          [:div.col-xs-4
+            (label :oberon "Oberon")
+            (check-box { :class "form-control" } :oberon)]]
+        [:br]
         [:div
-          (label :percival "Percival")
-          (check-box :percival)]
-        [:div ;add validation to prevent morgana when percival isn't present
-          (label :morgana "Morgana")
-          (check-box :morgana)]
-        [:div
-          (label :oberon "Oberon")
-          (check-box :oberon)]
-        [:div
-          (submit-button "Submit")])]))
+          (submit-button { :class "btn btn-block btn-lg btn-primary" } "Create Game")])]))
 
 (defn show [game-state]
   (case (:stage game-state)
