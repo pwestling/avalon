@@ -1,8 +1,8 @@
 (ns avalon.views.login
-  (:use hiccup.core hiccup.form))
+  (:use hiccup.core hiccup.form avalon.views.layout))
 
 (defn index []
-  (html
+  (layout
     [:body
       (form-to [:post "/login"]
         [:div

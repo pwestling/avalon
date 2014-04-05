@@ -1,8 +1,8 @@
 (ns avalon.views.home
-  (:use hiccup.core))
+  (:use hiccup.core avalon.views.layout))
 
 (defn index [current-games]
-  (html
+  (layout
     [:body
       "Welcome to Avalon! Here are some games you can join:"
       [:ul

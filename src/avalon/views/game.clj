@@ -1,8 +1,8 @@
 (ns avalon.views.game
-  (:use hiccup.core hiccup.form))
+  (:use hiccup.core hiccup.form avalon.views.layout))
 
 (defn newg []
-  (html
+  (layout
     [:body
       (form-to [:post "/create"]
         [:div
