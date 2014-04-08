@@ -12,5 +12,20 @@
 (defn set [& commands]
   (wcar* (apply car/set commands)))
 
+(defn new-id [resource]
+  (wcar* (car/incr (str resource "-" "id"))))
+
+(defn new-entry [resource value]
+  (let
+    [new-id (new-id resource)]
+    (set (str resource ":" new-id) value)
+    new-id))
+
 (defn retrieve-game [gameid]
   (wcar* (car/get (str "game" gameid))))
+
+(defn exists? [resource id]
+  (wcar* (car/exists (str resource ":" id))))
+
+(defn get-entry [resource id]
+  (wcar* (car/get (str resource ":" id))))
