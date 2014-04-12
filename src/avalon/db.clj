@@ -37,5 +37,10 @@
 (defn get-entry [resource id]
   (wcar* (car/get (str resource ":" id))))
 
+<<<<<<< HEAD
 (defn delete-entry [resource id]
   (wcar* (car/del (str resource ":" id))))
+=======
+(defn set-entry [resource id value]
+  (wcar* (car/set (str resource ":" id) value)))
+>>>>>>> minor changes

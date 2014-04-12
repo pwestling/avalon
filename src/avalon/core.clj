@@ -1,12 +1,13 @@
 (ns avalon.core)
 
 (def roles
-  { :loyal-servant #()
-    :minion-mordred #()
-    :merlin #()
-    :morgana #()
-    :percival #()
-    :oberon #()})
+  { :loyal-servant {:info-fn #() :side :good :necessary false}
+    :minion-mordred {:info-fn #() :side :evil :necessary false}
+    :merlin {:info-fn #() :side :good :necessary true}
+    :morgana {:info-fn #() :side :evil :necessary false}
+    :percival {:info-fn #() :side :good :necessary false}
+    :oberon {:info-fn #() :side :evil :necessary false}
+    :assassin {:info-fn #() :side :evil :necessary true}})
 
 (def steps
   [:select-team :mission])
@@ -76,16 +77,6 @@
 (defn team-vote-passed? [state]
   (vote-passed (half (num-players state)) state (:votes (current-team-selection state))))
 
-(defn current-phase [state]
-  (let [round-index (current-round-index state)
-        round (current-round state)
-        team-select (current-team-selection state)]
-    (cond
-     (done-with-missions? state) :merlin-guess
-     (:mission round) :mission
-     (:proposed-team team-select):team-vote
-     :else :propose-team )))
-
 (defn valid-to-vote-for-team? [state player-id]
   (and (= (current-phase state) :team-vote)
        (= nil (get (:votes (current-team-selection state)) player-id))))
@@ -122,6 +113,23 @@
 (defn done-with-missions? [state]
   (or (= 5 (current-round-index state))
       (mission-winner state)))
+
+(defn current-phase [state]
+  (let [round-index (current-round-index state)
+        round (current-round state)
+        team-select (current-team-selection state)]
+    (cond
+     (done-with-missions? state) :merlin-guess
+     (:mission round) :mission
+     (:proposed-team team-select):team-vote
+     :else :propose-team )))
+
+(defn mandatory-roles [] (into {} (filter #(-> % val (:necessary)) roles)))
+
+
+(defn roles-for [num-players special-roles]
+  )
+
 
 ;New State functions
 
