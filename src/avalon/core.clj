@@ -128,10 +128,20 @@
 
 (defn mandatory-roles [] (into {} (filter #(-> % val (:necessary)) roles)))
 
+(defn num-evil-players [num-players] (int (/ num-players 2)))
+
+(defn num-evil-roles [role-keys] (count (filter #(-> % val :side (= :evil)) (select-keys roles role-keys))))
 
 (defn roles-for [num-players special-roles]
-  )
+  (let [roles (concat (mandatory-roles) special-roles)
+        current-evil (num-evil-roles roles)
+        total-evil (num-evil-players num-players)
+        good-to-add (- num-players (count roles) total-evil)]
+    (concat roles
+            (repeat (- total-evil current-evil) :minion-mordred)
+            (repeat good-to-add :loyal-servant))))
 
+(roles-for 4 [:percival])
 
 ;New State functions
 

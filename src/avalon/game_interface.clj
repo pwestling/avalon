@@ -1,6 +1,7 @@
-(ns avalon.game-interface (:require [taoensso.carmine :as car :refer (wcar)]))
+(ns avalon.game_interface (:require [taoensso.carmine :as car :refer (wcar)]
+                                    [avalon.db :as db]))
 (use 'avalon.core)
-(use 'avalon.db)
+
 
 (def example-game-state {:id 10 :players [1,2,3] :player-roles {1 :loyal-servant 2 :assassin 3 :merlin} :rounds {0 {:select-team [{:leader 1}]}}})
 
@@ -68,10 +69,10 @@
    :num-players 4
    :roles [:percival, :morgana]})
 
-(defn valid-game? [attrbutes]
-  (<= (+ (count :roles attrbutes) 2) (:num-players attrbutes)))
+(defn valid-game? [attributes]
+  (<= (+ (count (:roles attributes)) 2) (:num-players attributes)))
 
 (defn new-game [attributes]
   (make-new-game
    {:players []
-    :roles ()}))
+    :roles (roles-for (:num-players attributes) (:roles attributes))}))
