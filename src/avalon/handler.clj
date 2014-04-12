@@ -8,15 +8,15 @@
             [avalon.middleware.auth :as auth]))
 
 (defroutes auth-routes
-  (GET "/" {session :session} (home/index session))
+  (GET "/" [request] (home/index request))
 
-  (GET "/new" [] (game/newg))
+  (GET "/new" [request] (game/newg request))
   (POST "/create" request (game/create request)) ;figure out how to destructure the origin url
-  (GET "/game/:name" [name] (game/show name)))
+  (GET "/game/:name" [name :as request] (game/show request name)))
 
 (defroutes login-routes
-  (GET "/login" [] (login/index))
-  (POST "/login" [name :as request] (login/create name request)))
+  (GET "/login" [request] (login/index request))
+  (POST "/login" [name :as request] (login/create request name)))
 
 (defroutes main-routes
   (auth/with-auth auth-routes)

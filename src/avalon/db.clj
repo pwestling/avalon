@@ -25,7 +25,9 @@
   (wcar* (car/get (str "game" gameid))))
 
 (defn exists? [resource id]
-  (wcar* (car/exists (str resource ":" id))))
+  (do
+    (println (str resource ":" id))
+    (= 1 (wcar* (car/exists (str resource ":" id))))))
 
 (defn get-entry [resource id]
   (wcar* (car/get (str resource ":" id))))

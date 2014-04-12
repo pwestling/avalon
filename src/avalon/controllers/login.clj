@@ -5,13 +5,13 @@
 
 (defn update-name [name])
 
-(defn index []
+(defn index [request]
   (view/index))
 
 (defn store-user [request user-id]
   (update-in request [:cookies "user-id"] (fn [i] user-id)))
 
-(defn create [name request]
+(defn create [request name]
   (let
     [origin (get (:headers request) "origin")
      user-id (user-model/new-user { :name name })
