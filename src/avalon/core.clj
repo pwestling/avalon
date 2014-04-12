@@ -77,22 +77,7 @@
 (defn team-vote-passed? [state]
   (vote-passed (half (num-players state)) state (:votes (current-team-selection state))))
 
-(defn valid-to-vote-for-team? [state player-id]
-  (and (= (current-phase state) :team-vote)
-       (= nil (get (:votes (current-team-selection state)) player-id))))
 
-(defn valid-to-vote-for-mission? [state player-id]
-  (and (= (current-phase state) :mission)
-       (= nil (get (:votes (current-mission state)) player-id))
-       (some #(= player-id %)(:team (current-mission state)))))
-
-(defn valid-to-propose-team? [state player-id]
-  (and (= (current-phase state) :propose-team)
-       (= player-id (current-leader state))))
-
-(defn valid-to-guess-merlin? [state player-id]
-  (and (= (current-phase state) :merlin-guess)
-       (= :assassin (get (:player-roles state) player-id))))
 
 (defn mission-failed? [mission]
   (and (some #(= false (second %)) (:votes mission))
@@ -123,6 +108,23 @@
      (:mission round) :mission
      (:proposed-team team-select):team-vote
      :else :propose-team )))
+
+(defn valid-to-vote-for-team? [state player-id]
+  (and (= (current-phase state) :team-vote)
+       (= nil (get (:votes (current-team-selection state)) player-id))))
+
+(defn valid-to-vote-for-mission? [state player-id]
+  (and (= (current-phase state) :mission)
+       (= nil (get (:votes (current-mission state)) player-id))
+       (some #(= player-id %)(:team (current-mission state)))))
+
+(defn valid-to-propose-team? [state player-id]
+  (and (= (current-phase state) :propose-team)
+       (= player-id (current-leader state))))
+
+(defn valid-to-guess-merlin? [state player-id]
+  (and (= (current-phase state) :merlin-guess)
+       (= :assassin (get (:player-roles state) player-id))))
 
 (defn mandatory-roles [] (into {} (filter #(-> % val (:necessary)) roles)))
 
