@@ -12,5 +12,5 @@
           (form-to { :style "display:inline" } [:delete (str "/game/" (get game "id"))]
             (submit-button { :class "btn btn-xs pull-right" :style "margin-left: 10px" } "delete"))
           [:div { :class "badge" } (get game "num-players")]])]
-          [:div { :class "list-group" }
-            [:a { :class "list-group-item active" :href "/new" :style "text-align:center" } "Start a new game"]]]))
+      [:div { :class "list-group" }
+        [:a { :class "list-group-item active" :href "/new" :style "text-align:center" } "Start a new game"]]]))
