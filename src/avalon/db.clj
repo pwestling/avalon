@@ -26,7 +26,6 @@
 
 (defn exists? [resource id]
   (do
-    (println (str resource ":" id))
     (= 1 (wcar* (car/exists (str resource ":" id))))))
 
 (defn get-entry [resource id]
