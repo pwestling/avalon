@@ -1,5 +1,5 @@
 (ns avalon.controllers.game
-  (:use compojure.core ring.util.response)
+  (:use compojure.core ring.util.response clojure.set)
   (:require [avalon.views.game :as view]
             [avalon.models.game :as game]))
 
@@ -13,6 +13,7 @@
 (defn create [request]
   (let
     [origin (get (:headers request) "origin")
-     params (assoc (:form-params request) :stage :start)]
+     params (:form-params request)
+     attributes { :name (get params "name") :num-players (get params "num-players") :roles (intersection #{"percival" "morgana" "oberon"} (set (keys params))) }]
     (game/new-game params)
     (redirect origin)))
