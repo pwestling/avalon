@@ -11,8 +11,8 @@
       (include-js "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")]
     [:body
       [:nav { :class "navbar navbar-default navbar-static-top navbar-inverse" :role "navigation" }
-        [:container-fluid
-          [:navbar-header
+        [:div.container-fluid
+          [:div.navbar-header
             [:a { :class "navbar-brand" :href "#"} "Avalon"]]]]
       [:div { :class "container" }
         content]]))
