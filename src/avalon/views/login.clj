@@ -6,7 +6,7 @@
     [:div
       (form-to [:post "/login"]
         [:div
-          (label :name "Name")
-          (text-field :name)]
+          (text-field { :class "form-control" :placeholder "What's your name?" } :name)]
+        [:br]
         [:div
-          (submit-button "Login")])]))
+          (submit-button { :class "form-control" } "Submit")])]))
