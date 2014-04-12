@@ -1,4 +1,4 @@
-(ns avalon.game_interface (:require [taoensso.carmine :as car :refer (wcar)]
+(ns avalon.game-interface (:require [taoensso.carmine :as car :refer (wcar)]
                                     [avalon.db :as db]))
 (use 'avalon.core)
 
