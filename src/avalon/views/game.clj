@@ -3,7 +3,7 @@
 
 (declare propose)
 (declare vote)
-(declare start)
+(declare no-stage)
 
 (defn newg []
   (layout
@@ -36,7 +36,7 @@
   (case (:stage game-state)
     :propose (propose game-state)
     :vote (vote game-state)
-    :start (start game-state)))
+    (no-stage game-state)))
 
 (defn propose [game-state]
   (let
@@ -68,6 +68,6 @@
             (hidden-field :pass true)
             [:button.btn.btn-warning.btn-block "Reject"])]])))
 
-(defn start [game-state]
+(defn no-stage [game-state]
   (layout
-    [:div "Starting a game..."]))
+    [:div "Unknown stage"]))

@@ -19,3 +19,6 @@
 
 (defn new-game [attributes]
   (db/new-entry "game" attributes))
+
+(defn delete-game [id]
+  (db/delete-entry "game" id))

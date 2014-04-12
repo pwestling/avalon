@@ -17,3 +17,8 @@
      attributes { :name (get params "name") :num-players (get params "num-players") :roles (intersection #{"percival" "morgana" "oberon"} (set (keys params))) }]
     (game/new-game params)
     (redirect origin)))
+
+(defn delete [request id]
+  (let []
+    (game/delete-game id)
+    (redirect "/")))
