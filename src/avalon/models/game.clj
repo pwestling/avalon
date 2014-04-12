@@ -1,4 +1,5 @@
-(ns avalon.models.game)
+(ns avalon.models.game
+  (:require [avalon.db :as db]))
 
 (def GAME-PROPOSAL
   {:name "LiveRamp"
@@ -11,7 +12,10 @@
    :team [["Takashi" 2] ["Chris" 3]]})
 
 (defn all []
-  (let [] [GAME-PROPOSAL GAME-VOTE]))
+  (db/get-all "game"))
 
-(defn find-game [name]
-  (let [] GAME-VOTE))
+(defn find-game [id]
+  (db/get-entry "game" id))
+
+(defn new-game [attributes]
+  (db/new-entry "game" attributes))

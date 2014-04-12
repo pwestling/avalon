@@ -5,7 +5,7 @@
   (let
     [user-id (db/new-entry "user" user)
      name (:name user)]
-    (db/set (str "user-name-to-id" ":" name) user-id)
+    (db/db-set (str "user-name-to-id" ":" name) user-id)
     user-id))
 
 (defn exists? [user-id]

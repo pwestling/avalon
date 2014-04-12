@@ -3,6 +3,7 @@
 
 (declare propose)
 (declare vote)
+(declare start)
 
 (defn newg []
   (layout
@@ -39,7 +40,8 @@
 (defn show [game-state]
   (case (:stage game-state)
     :propose (propose game-state)
-    :vote (vote game-state)))
+    :vote (vote game-state)
+    :start (start game-state)))
 
 (defn propose [game-state]
   (let
@@ -70,3 +72,7 @@
           (form-to  { :class "col-xs-6" } [:post "/vote"]
             (hidden-field :pass true)
             [:button.btn.btn-warning.btn-block "Reject"])]])))
+
+(defn start [game-state]
+  (layout
+    [:div "Starting a game..."]))

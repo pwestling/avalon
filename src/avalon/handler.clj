@@ -12,7 +12,7 @@
 
   (GET "/new" [request] (game/newg request))
   (POST "/create" request (game/create request)) ;figure out how to destructure the origin url
-  (GET "/game/:name" [name :as request] (game/show request name)))
+  (GET "/game/:id" [id :as request] (game/show request id)))
 
 (defroutes login-routes
   (GET "/login" [request] (login/index request))

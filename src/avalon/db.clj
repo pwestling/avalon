@@ -6,10 +6,15 @@
 (defmacro wcar* [& body]
   `(car/wcar redis-conn ~@body))
 
-(defn get [& commands]
+(defn db-get [& commands]
   (wcar* (apply car/get commands)))
 
-(defn set [& commands]
+(defn get-all [resource]
+  (let
+    [keys (wcar* (car/keys (str resource ":*")))]
+    (wcar* (apply car/mget keys))))
+
+(defn db-set [& commands]
   (wcar* (apply car/set commands)))
 
 (defn new-id [resource]
@@ -17,12 +22,13 @@
 
 (defn new-entry [resource value]
   (let
-    [new-id (new-id resource)]
-    (set (str resource ":" new-id) value)
+    [new-id (new-id resource)
+     value-with-id (assoc value "id" new-id)]
+    (db-set (str resource ":" new-id) value-with-id)
     new-id))
 
-(defn retrieve-game [gameid]
-  (wcar* (car/get (str "game" gameid))))
+(defn get-entry [resource id]
+  (wcar* (car/get (str resource ":" id))))
 
 (defn exists? [resource id]
   (do
