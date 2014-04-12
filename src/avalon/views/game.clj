@@ -16,13 +16,8 @@
         [:div
           [:select
             { :name :num-players :class "form-control" }
-            (select-options [1, 2, 3, 4, 5, 6])]]
+            (select-options [3, 4, 5, 6])]]
         [:br]
-;        [:div
-;          { :class "btn-group btn-group" :data-toggle "buttons-checkbox" }
-;          [:button { :type "button" :class "btn btn-default" } "Percival" ]
-;          [:button { :type "button" :class "btn btn-default" } "Morgana" ]
-;          [:button { :type "button" :class "btn btn-default" } "Oberon" ]]
         [:div.row
           [:div.col-xs-4
             (label :percival "Percival")
