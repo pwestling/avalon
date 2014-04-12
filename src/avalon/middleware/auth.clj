@@ -5,7 +5,7 @@
 
 (defn logged-in? [request]
   (let
-    [user-id (get (:cookies request) "user-id")]
+    [user-id (:value (get (:cookies request) "user-id"))]
     (and
       (not (nil? user-id))
       (user-model/exists? user-id))))
