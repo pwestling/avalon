@@ -17,6 +17,6 @@
         (let
           [user-id (:value (get (:cookies request) "user-id")) ;why am i getting the :value?
            user (db/get-entry "user" user-id)
-           request-with-user (update-in request [:session "user"] (fn [i] (do user)))] ;there must be a better way to update the session
+           request-with-user (update-in request [:params "current-user"] (fn [i] (do user)))] ;there must be a better way to update the session
           (handler request-with-user))
         (redirect login-path)))))
