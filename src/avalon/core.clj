@@ -37,6 +37,10 @@
 
 (defn sum [coll] (reduce + coll))
 
+(defn remove-one [pred coll]
+  (let [[n m] (split-with (complement pred) coll)]
+    (concat n (rest m))))
+
 ;Informational functions
 
 (defn current-round-index [state]
@@ -126,7 +130,7 @@
   (and (= (current-phase state) :merlin-guess)
        (= :assassin (get (:player-roles state) player-id))))
 
-(defn mandatory-roles [] (into {} (filter #(-> % val (:necessary)) roles)))
+(defn mandatory-roles [] (map first (filter #(-> % val (:necessary)) roles)))
 
 (defn num-evil-players [num-players] (int (/ num-players 2)))
 
@@ -136,15 +140,33 @@
   (let [roles (concat (mandatory-roles) special-roles)
         current-evil (num-evil-roles roles)
         total-evil (num-evil-players num-players)
-        good-to-add (- num-players (count roles) total-evil)]
+        good-to-add (- num-players (- (count roles) current-evil) total-evil)]
     (concat roles
             (repeat (- total-evil current-evil) :minion-mordred)
-            (repeat good-to-add :loyal-servant))))
+            (repeat good-to-add :loyal-servant))
+    ))
 
-(roles-for 4 [:percival])
+(defn in-game [state playerid]
+  (some #(= playerid %) (:players state)))
 
+(defn valid-to-add-player? [state player-id]
+  (and (seq (:unassigned-roles state))
+       (not (in-game state player-id))))
 ;New State functions
 
+(defn add-player [state player-id position]
+  (let [assigned-role (rand-nth (:unassigned-roles state))]
+    (-> state
+        (update-in [:players] #(conj % player-id))
+        (update-in [:roles] #(assoc % player-id assigned-role))
+        (update-in [:unassigned-roles] (fn [l] (remove-one #(= % assigned-role) l))))))
+
+(defn resolve-adding-players [state]
+  (if (seq (:unassigned-roles state))
+    state
+    (-> state
+        (dissoc :unassigned-roles)
+        (new-round))))
 
 (defn next-player [state player-id]
   (let [players (:players state)]

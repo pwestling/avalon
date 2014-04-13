@@ -7,12 +7,9 @@
 
 (defn retrieve-game [gameid] (db/get-entry "game" gameid))
 (defn save-game [state] (db/set-entry "game" (:id state) state))
-(defn make-new-game [state] (db/new-entry state))
+(defn make-new-game [state] (db/new-entry "game" state))
 
 (save-game example-game-state)
-
-(defn in-game [state playerid]
-  (some #(= playerid %) (:players state)))
 
 (defn noop  [state] state)
 
@@ -62,10 +59,17 @@
    playerid
    guess))
 
+(defn add-new-player [gameid playerid position]
+  (let [gamestate (retrieve-game gameid)]
+  (if  (valid-to-add-player? gamestate)
+   add-player
+   resolve-adding-players
+   gameid
+   playerid
+   position))))
 
 (def game-attribute
   {:name "GameTheFirst"
-   :id 10
    :num-players 4
    :roles [:percival, :morgana]})
 
@@ -74,5 +78,14 @@
 
 (defn new-game [attributes]
   (make-new-game
-   {:players []
-    :roles (roles-for (:num-players attributes) (:roles attributes))}))
+   {:name (:name attributes)
+    :players []
+    :unassigned-roles (roles-for (:num-players attributes) (:roles attributes))}))
+
+
+
+(let [id (new-game {:name "test" :num-players 4 :roles [:percival]})]
+  (add-new-player id "Porter" 0)
+  (add-new-player id "Armaan" 0)
+  (add-new-player id "Takashi" 0)
+  )
