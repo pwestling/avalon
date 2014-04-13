@@ -7,10 +7,10 @@
       [:div { :class "list-group" }
       [:div { :class "list-group-item" :style "text-align:center; " } "Open Games"]
       (for [game current-games]
-        [:a { :class "list-group-item" :href (str "/game/" (get game "id")) }
-          (get game "name")
-          (form-to { :style "display:inline" } [:delete (str "/game/" (get game "id"))]
+        [:a { :class "list-group-item" :href (str "/game/" (:id game)) }
+          (:name (:settings game))
+          (form-to { :style "display:inline" } [:delete (str "/game/" (:id game))]
             (submit-button { :class "btn btn-xs pull-right" :style "margin-left: 10px" } "delete"))
-          [:div { :class "badge" } (get game "num-players")]])]
+          [:div { :class "badge" } (:num-players game)]])]
       [:div { :class "list-group" }
         [:a { :class "list-group-item active" :href "/new" :style "text-align:center" } "Start a new game"]]]))

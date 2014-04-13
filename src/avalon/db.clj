@@ -23,7 +23,7 @@
 (defn new-entry [resource value]
   (let
     [new-id (new-id resource)
-     value-with-id (assoc value "id" new-id)]
+     value-with-id (assoc value :id new-id)]
     (db-set (str resource ":" new-id) value-with-id)
     new-id))
 
