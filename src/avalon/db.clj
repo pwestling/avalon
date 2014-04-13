@@ -11,7 +11,7 @@
 
 (defn get-all [resource]
   (let
-    [keys (wcar* (car/keys (str resource ":*")))]  
+    [keys (wcar* (car/keys (str resource ":*")))]
     (wcar* (apply car/mget keys))))
 
 (defn db-set [& commands]

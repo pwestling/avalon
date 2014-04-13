@@ -3,13 +3,9 @@
 (use 'avalon.core)
 
 
-(def example-game-state {:id 10 :players [1,2,3] :player-roles {1 :loyal-servant 2 :assassin 3 :merlin} :rounds {0 {:select-team [{:leader 1}]}}})
-
 (defn retrieve-game [gameid] (db/get-entry "game" gameid))
 (defn save-game [state] (db/set-entry "game" (:id state) state))
 (defn make-new-game [state] (db/new-entry "game" state))
-
-(save-game example-game-state)
 
 (defn noop  [state] state)
 
@@ -90,7 +86,6 @@
   (add-new-player id "Takashi" 0)
   (add-new-player id "Evan" 0)
   (add-new-player id "Ben" 0)
-  (save-game (add-player (retrieve-game id) "Porter" 0))
   (retrieve-game id))
 
 
