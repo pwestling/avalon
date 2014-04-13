@@ -53,7 +53,7 @@
           [:td (string/join "," (:roles (:settings game-state)))]]
         [:tr
           [:th (str "Players" " (max " (:num-players (:settings game-state)) ")")]
-          [:td (string/join "," (:players (:settings game-state)))]]]]])
+          [:td (string/join "," (:players game-state))]]]]])
 
 (defn- overview [game-state open]
   (layout
