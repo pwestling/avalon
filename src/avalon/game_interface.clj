@@ -61,12 +61,11 @@
 
 (defn add-new-player [gameid playerid position]
   (let [gamestate (retrieve-game gameid)]
-  (if  (valid-to-add-player? gamestate)
-   add-player
-   resolve-adding-players
-   gameid
-   playerid
-   position)))
+    (if  (valid-to-add-player? gamestate playerid)
+      (-> gamestate
+          (add-player playerid position)
+          (resolve-adding-players)
+          (save-game)))))
 
 (def game-attribute
   {:name "GameTheFirst"
@@ -89,4 +88,11 @@
   (add-new-player id "Porter" 0)
   (add-new-player id "Armaan" 0)
   (add-new-player id "Takashi" 0)
-  )
+  (add-new-player id "Evan" 0)
+  (add-new-player id "Ben" 0)
+  (save-game (add-player (retrieve-game id) "Porter" 0))
+  (retrieve-game id))
+
+
+
+
