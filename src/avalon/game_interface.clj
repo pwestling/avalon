@@ -66,7 +66,7 @@
    resolve-adding-players
    gameid
    playerid
-   position))))
+   position)))
 
 (def game-attribute
   {:name "GameTheFirst"
@@ -77,10 +77,11 @@
   (<= (+ (count (:roles attributes)) 2) (:num-players attributes)))
 
 (defn new-game [attributes]
-  (make-new-game
-   {:name (:name attributes)
-    :players []
-    :unassigned-roles (roles-for (:num-players attributes) (:roles attributes))}))
+  (let [roles-for-this-game (roles-for (:num-players attributes) (:roles attributes))]
+    (make-new-game
+     {:settings attributes
+      :players []
+      :unassigned-roles roles-for-this-game})))
 
 
 
