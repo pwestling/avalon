@@ -61,7 +61,8 @@
       (-> gamestate
           (add-player playerid position)
           (resolve-adding-players)
-          (save-game)))))
+          (save-game))
+      "FAILED")))
 
 (def game-attribute
   {:name "GameTheFirst"
@@ -72,11 +73,13 @@
   (<= (+ (count (:roles attributes)) 2) (:num-players attributes)))
 
 (defn new-game [attributes]
-  (let [roles-for-this-game (roles-for (:num-players attributes) (:roles attributes))]
-    (make-new-game
-     {:settings attributes
-      :players []
-      :unassigned-roles roles-for-this-game})))
+  (if (valid-game? attributes)
+    (let [roles-for-this-game (roles-for (:num-players attributes) (:roles attributes))]
+      (make-new-game
+       {:settings attributes
+        :players []
+        :unassigned-roles roles-for-this-game}))
+    "FAILED"))
 
 
 
@@ -85,8 +88,7 @@
   (add-new-player id "Armaan" 0)
   (add-new-player id "Takashi" 0)
   (add-new-player id "Evan" 0)
-  (add-new-player id "Ben" 0)
-  (retrieve-game id))
+  (add-new-player id "Ben" 0))
 
 
 
