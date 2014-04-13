@@ -38,7 +38,7 @@
     :vote (vote game-state)
     (no-stage game-state)))
 
-(defn propose [game-state]
+(defn- propose [game-state]
   (let
     [players (:players game-state)]
     (layout
@@ -51,7 +51,7 @@
           [:br]
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
 
-(defn vote [game-state]
+(defn- vote [game-state]
   (let
     [team (:team game-state)]
     (layout
@@ -68,6 +68,6 @@
             (hidden-field :pass true)
             [:button.btn.btn-warning.btn-block "Reject"])]])))
 
-(defn no-stage [game-state]
+(defn- no-stage [game-state]
   (layout
     [:div "Unknown stage"]))
