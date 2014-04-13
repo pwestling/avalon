@@ -60,7 +60,7 @@
     [:div
       (game-summary game-state)
       (if open
-        [:button.btn.btn-primary.btn-block "Join"])]))
+        [:a.btn.btn-primary.btn-block { :href (str "/game/" (:id game-state) "/join") } "Join"])]))
 
 (defn- propose [game-state]
   (let

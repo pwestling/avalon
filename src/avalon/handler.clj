@@ -12,6 +12,7 @@
 
   (GET "/new" [request] (game/newg request))
   (POST "/create" request (game/create request)) ;figure out how to destructure the origin url
+  (GET "/game/:id/join" [id :as request] (game/join-game request id))
   (GET "/game/:id" [id :as request] (game/show request id))
   (DELETE "/game/:id" [id :as request] (game/delete request id)))
 

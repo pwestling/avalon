@@ -11,6 +11,12 @@
 
 (defn newg [request] (view/newg))
 
+(defn join-game [request game-id]
+  (let
+    [user-id (:id (:current-user (:params request)))
+    resp (game-interface/add-new-player game-id user-id 0)]
+    (redirect (str "/game/" game-id))))
+
 (defn create [request]
   (let
     [origin (get (:headers request) "origin")
