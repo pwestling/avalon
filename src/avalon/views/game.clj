@@ -1,9 +1,11 @@
 (ns avalon.views.game
-  (:use hiccup.core hiccup.form avalon.views.layout))
+  (:use hiccup.core hiccup.form avalon.views.layout)
+  (:require [clojure.string :as string]))
 
 (declare propose)
 (declare vote)
 (declare no-stage)
+(declare overview)
 
 (defn newg []
   (layout
@@ -34,9 +36,31 @@
 
 (defn show [game-state]
   (case (:stage game-state)
+    :join (overview game-state true)
     :propose (propose game-state)
     :vote (vote game-state)
-    (no-stage game-state)))
+    (overview game-state false)))
+
+(defn- game-summary [game-state]
+  [:div
+    [:table.table.table-bordered
+      [:tbody
+        [:tr
+          [:th "Name"]
+          [:td (:name (:settings game-state))]]
+        [:tr
+          [:th "Roles"]
+          [:td (string/join "," (:roles (:settings game-state)))]]
+        [:tr
+          [:th (str "Players" " (max " (:num-players (:settings game-state)) ")")]
+          [:td (string/join "," (:players (:settings game-state)))]]]]])
+
+(defn- overview [game-state open]
+  (layout
+    [:div
+      (game-summary game-state)
+      (if open
+        [:button.btn.btn-primary.btn-block "Join"])]))
 
 (defn- propose [game-state]
   (let
