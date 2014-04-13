@@ -161,13 +161,6 @@
         (update-in [:roles] #(assoc % player-id assigned-role))
         (update-in [:unassigned-roles] (fn [l] (remove-one #(= % assigned-role) l))))))
 
-(defn resolve-adding-players [state]
-  (if (seq (:unassigned-roles state))
-    state
-    (-> state
-        (dissoc :unassigned-roles)
-        (new-round))))
-
 (defn next-player [state player-id]
   (let [players (:players state)]
     (get players
@@ -227,6 +220,13 @@
            (done-voting-for-mission? state))
     (new-round state)
     state))
+
+(defn resolve-adding-players [state]
+  (if (seq (:unassigned-roles state))
+    state
+    (-> state
+        (dissoc :unassigned-roles)
+        (new-round))))
 
 (defn vote-for-team [state player-id vote]
   (update-current-team-selection
