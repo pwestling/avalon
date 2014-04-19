@@ -1,6 +1,9 @@
 (ns avalon.models.user
   (:require [avalon.db :as db]))
 
+(defn get-user [id]
+  (db/get-entry "user" id))
+
 (defn new-user [user]
   (let
     [user-id (db/new-entry "user" user)

@@ -1,5 +1,6 @@
 (ns avalon.models.game
-  (:require [avalon.db :as db]))
+  (:require [avalon.db :as db]
+            [avalon.models.user :as user]))
 
 (def GAME-PROPOSAL
   {:name "LiveRamp"
@@ -16,6 +17,12 @@
 
 (defn find-game [id]
   (db/get-entry "game" id))
+
+(defn get-stage [game]
+  (or (last (:rounds game)) :open-game))
+
+(defn players [game]
+  (map user/get-user (:players game)))
 
 (defn new-game [attributes]
   (db/new-entry "game" attributes))

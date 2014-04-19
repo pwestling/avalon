@@ -1,6 +1,7 @@
 (ns avalon.views.game
   (:use hiccup.core hiccup.form avalon.views.layout)
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [avalon.models.game :as game]))
 
 (declare propose)
 (declare vote)
@@ -46,7 +47,7 @@
           [:td (string/join "," (:roles (:settings game-state)))]]
         [:tr
           [:th (str "Players" " (max " (:num-players (:settings game-state)) ")")]
-          [:td (string/join "," (:players game-state))]]]]])
+          [:td (string/join "," (map :name (game/players game-state)))]]]]])
 
 (defn overview [game-state open]
   (layout
