@@ -8,8 +8,11 @@
 (defn index [request]
   (view/index))
 
-(defn store-user [request user-id]
-  (update-in request [:cookies "user-id"] (fn [i] user-id)))
+(defn store-user [response user-id]
+  (update-in response [:cookies "user-id"] (fn [i] user-id)))
+
+(defn remove-user [response]
+  (store-user response ""))
 
 (defn create [request name]
   (let
@@ -17,3 +20,6 @@
      user-id (user-model/new-user { :name name })
      redirected-response (redirect origin)]
     (store-user redirected-response user-id)))
+
+(defn destroy [request]
+  (remove-user (redirect "/")))

@@ -13,6 +13,9 @@
       [:nav { :class "navbar navbar-default navbar-static-top navbar-inverse" :role "navigation" }
         [:div.container-fluid
           [:div.navbar-header
-            [:a { :class "navbar-brand" :href "#"} "Avalon"]]]]
+            [:a { :class "navbar-brand" :href "#"} "Avalon"]
+            [:ul.nav.navbar-nav.navbar-right
+              [:li
+                [:a { :href "/logout" } "Logout"]]]]]]
       [:div { :class "container" }
         content]]))

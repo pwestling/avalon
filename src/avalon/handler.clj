@@ -18,6 +18,7 @@
 
 (defroutes login-routes
   (GET "/login" [request] (login/index request))
+  (GET "/logout" [request] (login/destroy request))
   (POST "/login" [name :as request] (login/create request name)))
 
 (defroutes main-routes
