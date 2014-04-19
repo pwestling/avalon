@@ -34,14 +34,7 @@
         [:div
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Create Game")])]))
 
-(defn show [game-state]
-  (case (:stage game-state)
-    :join (overview game-state true)
-    :propose (propose game-state)
-    :vote (vote game-state)
-    (overview game-state false)))
-
-(defn- game-summary [game-state]
+(defn game-summary [game-state]
   [:div
     [:table.table.table-bordered
       [:tbody
@@ -55,16 +48,16 @@
           [:th (str "Players" " (max " (:num-players (:settings game-state)) ")")]
           [:td (string/join "," (:players game-state))]]]]])
 
-(defn- overview [game-state open]
+(defn overview [game-state open]
   (layout
     [:div
       (game-summary game-state)
       (if open
         [:a.btn.btn-primary.btn-block { :href (str "/game/" (:id game-state) "/join") } "Join"])]))
 
-(defn- propose [game-state]
+(defn propose [game-state]
   (let
-    [players (:players game-state)]
+    [players (game/players game-state)]
     (layout
       [:div
         [:h3 { :style "text-align:center" } "Team Selection"]
@@ -75,7 +68,7 @@
           [:br]
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
 
-(defn- vote [game-state]
+(defn vote [game-state]
   (let
     [team (:team game-state)]
     (layout
@@ -92,6 +85,6 @@
             (hidden-field :pass true)
             [:button.btn.btn-warning.btn-block "Reject"])]])))
 
-(defn- no-stage [game-state]
+(defn no-stage [game-state]
   (layout
     [:div "Unknown stage"]))

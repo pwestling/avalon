@@ -4,10 +4,22 @@
             [avalon.models.game :as game]
             [avalon.game-interface :as game-interface]))
 
+(declare propose)
+(declare vote)
+(declare join-game)
+(declare closed-game)
+
 (defn show [request id]
   (let
-    [game-state (game/find-game id)]
-    (view/show game-state)))
+    [game-state (game/find-game id)
+     stage (game/get-stage game-state)]
+    (println stage)
+    (println game-state)
+    (case stage
+      :open-game (open-game game-state)
+      :propose (propose game-state)
+      :vote (vote game-state)
+      (closed-game game-state))))
 
 (defn newg [request] (view/newg))
 
@@ -30,3 +42,15 @@
   (let []
     (game/delete-game id)
     (redirect "/")))
+
+(defn open-game [game-state]
+  (view/overview game-state true))
+
+(defn closed-game [game-state]
+  (view/overview game-state false))
+
+(defn propose [game-state]
+  (view/propose game-state))
+
+(defn vote [game-state]
+  (view/vote game-state))
