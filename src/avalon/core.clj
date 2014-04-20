@@ -110,7 +110,7 @@
     (cond
      (done-with-missions? state) :merlin-guess
      (:mission round) :mission
-     (:proposed-team team-select):team-vote
+     (:proposed-team team-select) :team-vote
      :else :propose-team )))
 
 (defn valid-to-vote-for-team? [state player-id]
