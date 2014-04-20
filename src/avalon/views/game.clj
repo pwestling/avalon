@@ -73,22 +73,19 @@
   (layout
     [:div (str (:name leader) " is picking a team of " team-size)]))
 
-(defn vote [game-state]
-  (let
-    [team (:team game-state)]
-    (layout
-      [:div
-        [:h3 { :style "text-align:center" } "Proposed Team"]
-        [:div.list-group
-          (for [player team]
-            [:div.list-group-item (first player)])]
-        [:div.row { :style "text-align:center" }
-          (form-to { :class "col-xs-6" } [:post "/vote"]
-            (hidden-field :pass true)
-            [:button.btn.btn-success.btn-block "Support"])
-          (form-to  { :class "col-xs-6" } [:post "/vote"]
-            (hidden-field :pass true)
-            [:button.btn.btn-warning.btn-block "Reject"])]])))
+(defn vote [leader team]
+  (layout
+    [:div
+      [:h3 { :style "text-align:center" } (str (:name leader) " proposed the team:")]
+      [:div.list-group
+        (for [p team] [:div.list-group-item (:name p)])]
+      [:div.row { :style "text-align:center" }
+        (form-to { :class "col-xs-6" } [:post "/vote"]
+          (hidden-field :pass true)
+          [:button.btn.btn-success.btn-block "Support"])
+        (form-to  { :class "col-xs-6" } [:post "/vote"]
+          (hidden-field :pass true)
+          [:button.btn.btn-warning.btn-block "Reject"])]]))
 
 (defn no-stage [game-state]
   (layout

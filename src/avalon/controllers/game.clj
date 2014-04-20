@@ -72,4 +72,8 @@
       (view/watch-team-selection game-state leader team-size))))
 
 (defn vote [game-state]
-  (view/vote game-state))
+  (let
+    [info (core/current-team-selection game-state)
+     team (map user/get-user (:proposed-team info))
+     leader (user/get-user (:leader info))]
+    (view/vote leader team)))
