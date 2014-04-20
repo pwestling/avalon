@@ -3,7 +3,7 @@
   (:require [clojure.string :as string]
             [avalon.models.game :as game]))
 
-(declare propose)
+(declare select-team)
 (declare vote)
 (declare no-stage)
 (declare overview)
@@ -56,7 +56,7 @@
       (if open
         [:a.btn.btn-primary.btn-block { :href (str "/game/" (:id game-state) "/join") } "Join"])]))
 
-(defn propose [game-state]
+(defn select-team [game-state]
   (let
     [players (game/players game-state)]
     (layout

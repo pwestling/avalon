@@ -4,7 +4,7 @@
             [avalon.models.game :as game]
             [avalon.game-interface :as game-interface]))
 
-(declare propose)
+(declare select-team)
 (declare vote)
 (declare join-game)
 (declare closed-game)
@@ -17,7 +17,7 @@
     (println game-state)
     (case stage
       :open-game (open-game game-state)
-      :propose (propose game-state)
+      :select-team (select-team game-state)
       :vote (vote game-state)
       (closed-game game-state))))
 
@@ -49,8 +49,8 @@
 (defn closed-game [game-state]
   (view/overview game-state false))
 
-(defn propose [game-state]
-  (view/propose game-state))
+(defn select-team [game-state]
+  (view/select-team game-state))
 
 (defn vote [game-state]
   (view/vote game-state))
