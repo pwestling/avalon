@@ -8,6 +8,7 @@
 (declare vote)
 (declare join-game)
 (declare closed-game)
+(declare open-game)
 
 (defn show [request id]
   (let
