@@ -65,7 +65,7 @@
         (form-to [:post "/propose"]
           [:select.form-control
             { :multiple true :name :team }
-            (select-options players)]
+            (select-options (map (fn [p] [(:name p) (:id p)]) players))]
           [:br]
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
 
