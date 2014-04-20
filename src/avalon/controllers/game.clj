@@ -12,14 +12,14 @@
 (defn show [request id]
   (let
     [game-state (game/find-game id)
-     stage (game/get-stage game-state)]
-    (println stage)
-    (println game-state)
-    (case stage
-      :open-game (open-game game-state)
-      :select-team (select-team game-state)
-      :vote (vote game-state)
-      (closed-game game-state))))
+     stage (game/get-stage game-state) ; let's fix this stage thing
+     stage-name (game/get-stage-name stage)
+     stage-info (game/get-stage-info stage)]
+    (case stage-name
+      :open-game (open-game game-state stage-info)
+      :select-team (select-team game-state stage-info)
+      :vote (vote game-state stage-info)
+      (closed-game game-state stage-info))))
 
 (defn newg [request] (view/newg))
 
@@ -43,14 +43,16 @@
     (game/delete-game id)
     (redirect "/")))
 
-(defn open-game [game-state]
+(defn open-game [game-state stage-info]
   (view/overview game-state true))
 
-(defn closed-game [game-state]
+(defn closed-game [game-state stage-info]
   (view/overview game-state false))
 
-(defn select-team [game-state]
-  (view/select-team game-state))
+(defn select-team [game-state stage-info]
+  (let
+    []
+    (view/select-team game-state)))
 
-(defn vote [game-state]
+(defn vote [game-state stage-info]
   (view/vote game-state))
