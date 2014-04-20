@@ -83,13 +83,9 @@
 
 
 
-(let [id (new-game {:name "test" :num-players 4 :roles [:percival]})]
-  (add-new-player id "Porter" 0)
-  (add-new-player id "Armaan" 0)
-  (add-new-player id "Takashi" 0)
-  (add-new-player id "Evan" 0)
-  (add-new-player id "Ben" 0))
-
-
-
-
+;(let [id (new-game {:name "test" :num-players 4 :roles [:percival]})]
+;  (add-new-player id "Porter" 0)
+;  (add-new-player id "Armaan" 0)
+;  (add-new-player id "Takashi" 0)
+;  (add-new-player id "Evan" 0)
+;  (add-new-player id "Ben" 0))
