@@ -73,19 +73,28 @@
   (layout
     [:div (str (:name leader) " is picking a team of " team-size)]))
 
-(defn vote [leader team]
+(defn team-summary [team]
+  [:div.list-group
+    (for [p team] [:div.list-group-item (:name p)])])
+
+(defn vote [id leader team]
   (layout
     [:div
       [:h3 { :style "text-align:center" } (str (:name leader) " proposed the team:")]
-      [:div.list-group
-        (for [p team] [:div.list-group-item (:name p)])]
+      (team-summary team)
       [:div.row { :style "text-align:center" }
-        (form-to { :class "col-xs-6" } [:post "/vote"]
-          (hidden-field :pass true)
+        (form-to { :class "col-xs-6" } [:post (str "/game/" id "/vote")]
+          (hidden-field :vote "pass") ;figure out how to use a boolean instead of pass/fail
           [:button.btn.btn-success.btn-block "Support"])
-        (form-to  { :class "col-xs-6" } [:post "/vote"]
-          (hidden-field :pass true)
+        (form-to  { :class "col-xs-6" } [:post (str "/game/" id "/vote")]
+          (hidden-field :vote "fail")
           [:button.btn.btn-warning.btn-block "Reject"])]]))
+
+(defn waiting-for-votes [leader team]
+  (layout
+    [:div
+      [:h3 { :style "text-align:center" } (str "Waiting for people to vote for team proposed by " (:name leader) ":")]
+      (team-summary team)]))
 
 (defn no-stage [game-state]
   (layout

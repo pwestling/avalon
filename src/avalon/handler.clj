@@ -17,7 +17,8 @@
 
 (defroutes game-action-routes
   (GET "/game/:id/join" [id :as request] (game-actions/join request id))
-  (POST "/game/:id/propose" [id :as request] (game-actions/propose request id)))
+  (POST "/game/:id/propose" [id :as request] (game-actions/propose request id))
+  (POST "/game/:id/vote" [id :as request] (game-actions/vote request id)))
 
 (defroutes login-routes
   (GET "/login" [request] (login/index request))

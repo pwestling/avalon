@@ -11,3 +11,8 @@
   (do
     (game-interface/choose-team id (:id active-user) (:team (:params request))))
     (redirect (str "/game/" id)))
+
+(defn vote [request id]
+  (do
+    (game-interface/vote id (:id active-user) (= "pass" (:vote (:params request))))
+    (redirect (str "/game/" id))))

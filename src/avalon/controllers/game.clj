@@ -65,4 +65,6 @@
     [info (core/current-team-selection game-state)
      team (map user/get-user (:proposed-team info))
      leader (user/get-user (:leader info))]
-    (view/vote leader team)))
+    (if (core/valid-to-vote-for-team? game-state (:id active-user))
+      (view/vote (:id game-state) leader team)
+      (view/waiting-for-votes leader team))))
