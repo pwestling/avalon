@@ -49,6 +49,11 @@
     (game/delete-game id)
     (redirect "/")))
 
+(defn propose [request id]
+  (do
+    (game-interface/choose-team id (:id active-user) (:team (:params request))))
+    (redirect (str "/game/" id)))
+
 ; game views
 (defn mission [game-state])
 (defn merlin-guess [game-state])

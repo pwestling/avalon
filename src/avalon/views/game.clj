@@ -62,9 +62,9 @@
     (layout
       [:div
         [:h3 { :style "text-align:center" } (str "Pick a team of " team-size)]
-        (form-to [:post "/propose"]
+        (form-to [:post (str "/game/" (:id game-state) "/propose")]
           [:select.form-control
-            { :multiple true :name :team }
+            { :multiple true :name "team[]" }
             (select-options (map (fn [p] [(:name p) (:id p)]) players))]
           [:br]
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
