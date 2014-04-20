@@ -2,6 +2,7 @@
   (:use compojure.core ring.util.response clojure.set avalon.globals)
   (:require [avalon.views.game :as view]
             [avalon.models.game :as game]
+            [avalon.models.user :as user]
             [avalon.game-interface :as game-interface]
             [avalon.core :as core]))
 
@@ -60,8 +61,11 @@
 
 (defn propose-team [game-state]
   (let
-    [team-size 2] ; get this from the state
-    (view/select-team game-state team-size)))
+    [team-size 2
+     leader (user/get-user (core/current-leader game-state))] ; get this from the state
+    (if (core/valid-to-propose-team? game-state (:id active-user))
+      (view/select-team game-state team-size)
+      (view/watch-team-selection game-state leader team-size))))
 
 (defn vote [game-state stage-info]
   (view/vote game-state))

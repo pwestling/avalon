@@ -69,6 +69,10 @@
           [:br]
           (submit-button { :class "btn btn-block btn-lg btn-primary" } "Propose"))])))
 
+(defn watch-team-selection [game-state leader team-size]
+  (layout
+    [:div (str (:name leader) " is picking a team of " team-size)]))
+
 (defn vote [game-state]
   (let
     [team (:team game-state)]
