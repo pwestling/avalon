@@ -51,8 +51,9 @@
 
 (defn select-team [game-state stage-info]
   (let
-    []
-    (view/select-team game-state)))
+    [team-size 2] ; get this from the state
+    (println stage-info)
+    (view/select-team game-state team-size)))
 
 (defn vote [game-state stage-info]
   (view/vote game-state))

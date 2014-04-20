@@ -56,12 +56,12 @@
       (if open
         [:a.btn.btn-primary.btn-block { :href (str "/game/" (:id game-state) "/join") } "Join"])]))
 
-(defn select-team [game-state]
+(defn select-team [game-state team-size]
   (let
     [players (game/players game-state)]
     (layout
       [:div
-        [:h3 { :style "text-align:center" } "Team Selection"]
+        [:h3 { :style "text-align:center" } (str "Pick a team of " team-size)]
         (form-to [:post "/propose"]
           [:select.form-control
             { :multiple true :name :team }
