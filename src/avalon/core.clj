@@ -62,6 +62,12 @@
 (defn num-players [state]
   (count (:players state)))
 
+(defn max-players [state]
+  (:num-players (:settings state)))
+
+(defn enough-players-to-play? [state]
+  (= (max-players state) (num-players state)))
+
 (defn done-voting? [state thresh votes]
   (= (count votes)
      thresh))
@@ -111,7 +117,8 @@
      (done-with-missions? state) :merlin-guess
      (:mission round) :mission
      (:proposed-team team-select) :team-vote
-     :else :propose-team )))
+     (enough-players-to-play? state) :propose-team
+     :else :open)))
 
 (defn valid-to-vote-for-team? [state player-id]
   (and (= (current-phase state) :team-vote)

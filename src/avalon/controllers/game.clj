@@ -19,7 +19,7 @@
      stage (game/get-stage game-state)]
     (println stage)
     (case stage
-      :open-game (open-game game-state)
+      :open (open-game game-state)
       :propose-team (propose-team game-state)
       :team-vote (vote game-state)
       :mission (mission game-state)
