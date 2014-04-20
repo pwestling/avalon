@@ -4,6 +4,7 @@
             [compojure.route :as route]
             [avalon.controllers.home :as home]
             [avalon.controllers.game :as game]
+            [avalon.controllers.game-actions :as game-actions]
             [avalon.controllers.login :as login]
             [avalon.middleware.auth :as auth]))
 
@@ -12,8 +13,8 @@
 
   (GET "/new" [request] (game/newg request))
   (POST "/create" request (game/create request)) ;figure out how to destructure the origin url
-  (GET "/game/:id/join" [id :as request] (game/join-game request id))
-  (POST "/game/:id/propose" [id :as request] (game/propose request id))
+  (GET "/game/:id/join" [id :as request] (game-actions/join request id))
+  (POST "/game/:id/propose" [id :as request] (game-actions/propose request id))
   (GET "/game/:id" [id :as request] (game/show request id))
   (DELETE "/game/:id" [id :as request] (game/delete request id)))
 

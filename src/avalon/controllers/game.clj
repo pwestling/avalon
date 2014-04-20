@@ -28,12 +28,6 @@
 
 (defn newg [request] (view/newg))
 
-(defn join-game [request game-id]
-  (let
-    [user-id (:id active-user)
-    resp (game-interface/add-new-player game-id user-id 0)]
-    (redirect (str "/game/" game-id))))
-
 (defn create [request]
   (let
     [origin (get (:headers request) "origin")
@@ -47,11 +41,6 @@
   (let []
     (game/delete-game id)
     (redirect "/")))
-
-(defn propose [request id]
-  (do
-    (game-interface/choose-team id (:id active-user) (:team (:params request))))
-    (redirect (str "/game/" id)))
 
 ; game views
 (defn mission [game-state])
