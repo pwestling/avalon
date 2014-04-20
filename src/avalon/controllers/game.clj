@@ -1,5 +1,5 @@
 (ns avalon.controllers.game
-  (:use compojure.core ring.util.response clojure.set)
+  (:use compojure.core ring.util.response clojure.set avalon.globals)
   (:require [avalon.views.game :as view]
             [avalon.models.game :as game]
             [avalon.game-interface :as game-interface]))
@@ -26,7 +26,7 @@
 
 (defn join-game [request game-id]
   (let
-    [user-id (:id (:current-user (:params request)))
+    [user-id (:id active-user)
     resp (game-interface/add-new-player game-id user-id 0)]
     (redirect (str "/game/" game-id))))
 

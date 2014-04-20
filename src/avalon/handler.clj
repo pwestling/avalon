@@ -1,5 +1,5 @@
 (ns avalon.handler
-  (:use compojure.core)
+  (:use compojure.core avalon.globals)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
             [avalon.controllers.home :as home]
