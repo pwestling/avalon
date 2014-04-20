@@ -2,24 +2,28 @@
   (:use compojure.core ring.util.response clojure.set avalon.globals)
   (:require [avalon.views.game :as view]
             [avalon.models.game :as game]
-            [avalon.game-interface :as game-interface]))
+            [avalon.game-interface :as game-interface]
+            [avalon.core :as core]))
 
-(declare select-team)
+(declare propose-team)
 (declare vote)
-(declare join-game)
+(declare mission)
+(declare merlin-guess)
 (declare closed-game)
 (declare open-game)
 
 (defn show [request id]
   (let
     [game-state (game/find-game id)
-     stage (game/get-stage game-state) ; let's fix this stage thing
-     stage-name (game/get-stage-name stage)
-     stage-info (game/get-stage-info stage)]
-    (case stage-name
+     stage (game/get-stage game-state)
+     stage-info {}]
+    (println stage)
+    (case stage
       :open-game (open-game game-state stage-info)
-      :select-team (select-team game-state stage-info)
-      :vote (vote game-state stage-info)
+      :propose-team (propose-team game-state)
+      :team-vote (vote game-state stage-info)
+      :mission (mission game-state)
+      :merlin-guess (merlin-guess game-state)
       (closed-game game-state stage-info))))
 
 (defn newg [request] (view/newg))
@@ -44,16 +48,19 @@
     (game/delete-game id)
     (redirect "/")))
 
+; game views
+(defn mission [game-state])
+(defn merlin-guess [game-state])
+
 (defn open-game [game-state stage-info]
   (view/overview game-state true))
 
 (defn closed-game [game-state stage-info]
   (view/overview game-state false))
 
-(defn select-team [game-state stage-info]
+(defn propose-team [game-state]
   (let
     [team-size 2] ; get this from the state
-    (println stage-info)
     (view/select-team game-state team-size)))
 
 (defn vote [game-state stage-info]

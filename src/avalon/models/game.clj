@@ -9,14 +9,8 @@
 (defn find-game [id]
   (db/get-entry "game" id))
 
-(defn get-stage-name [stage]
-  (or (first (keys stage)) :open-game))
-
-(defn get-stage-info [stage]
-  (first (vals stage)))
-
 (defn get-stage [game]
-  (avalon/current-round game))
+  (avalon/current-phase game))
 
 (defn players [game]
   (map user/get-user (:players game)))
