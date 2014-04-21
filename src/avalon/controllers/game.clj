@@ -43,7 +43,14 @@
     (redirect "/")))
 
 ; game views
-(defn mission [game-state])
+(defn mission [game-state]
+  (let
+    [info (core/current-mission game-state)
+     team (map user/get-user (:team info))]
+    (if (core/valid-to-vote-for-mission? game-state (:id active-user))
+      (view/mission (:id game-state) team)
+      (view/watch-mission team))))
+
 (defn merlin-guess [game-state])
 
 (defn open-game [game-state]

@@ -90,6 +90,25 @@
           (hidden-field :vote "fail")
           [:button.btn.btn-warning.btn-block "Reject"])]]))
 
+(defn mission [id team]
+  (layout
+    [:div
+      [:div (str "You are on a mission with:")]
+      (team-summary team)
+      [:div.row { :style "text-align:center" }
+        (form-to { :class "col-xs-6" } [:post (str "/game/" id "/quest")]
+          (hidden-field :vote "pass") ;figure out how to use a boolean instead of pass/fail
+          [:button.btn.btn-success.btn-block "Pass"])
+        (form-to  { :class "col-xs-6" } [:post (str "/game/" id "/quest")]
+          (hidden-field :vote "fail")
+          [:button.btn.btn-warning.btn-block "Fail"])]]))
+
+(defn watch-mission [team]
+  (layout
+    [:div
+      [:div "The following people are on a mission:"]
+      (team-summary team)]))
+
 (defn waiting-for-votes [leader team]
   (layout
     [:div

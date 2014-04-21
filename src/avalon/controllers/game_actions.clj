@@ -16,3 +16,8 @@
   (do
     (game-interface/vote id (:id active-user) (= "pass" (:vote (:params request))))
     (redirect (str "/game/" id))))
+
+(defn quest [request id]
+  (do
+    (game-interface/quest id (:id active-user) (= "pass" (:vote (:params request))))
+    (redirect (str "/game/" id))))
