@@ -65,6 +65,19 @@
 (defn max-players [state]
   (:num-players (:settings state)))
 
+(defn is-good? [state player-id]
+  (let [role (get (:roles state) player-id)]
+    (some #(= role %) [:loyal-servant :merlin])))
+
+(defn is-evil? [state player-id]
+  (not (is-good? state player-id)))
+
+(defn good-players [state]
+  (filter #(is-good? state %) (:players state)))
+
+(defn evil-players [state]
+  (filter #(is-evil? state %) (:players state)))
+
 (defn enough-players-to-play? [state]
   (= (max-players state) (num-players state)))
 

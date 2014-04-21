@@ -51,7 +51,13 @@
       (view/mission (:id game-state) team)
       (view/watch-mission team))))
 
-(defn merlin-guess [game-state])
+(defn merlin-guess [game-state]
+  (let
+    [good-players (map user/get-user (core/good-players game-state))
+     evil-players (map user/get-user (core/evil-players game-state))]
+    (if (core/is-good? game-state (:id active-user))
+      (view/watch-merlin-guess evil-players)
+      (view/merlin-guess (:id game-state) good-players))))
 
 (defn open-game [game-state]
   (view/overview game-state true))

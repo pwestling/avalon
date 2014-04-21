@@ -115,6 +115,23 @@
       [:h3 { :style "text-align:center" } (str "Waiting for people to vote for team proposed by " (:name leader) ":")]
       (team-summary team)]))
 
+(defn merlin-guess [id good-players]
+  (layout
+    [:div
+      [:h3 "Who is Merlin?"]
+      (form-to [:post (str "/game/" id "/merlin")]
+        [:select.form-control
+          { :multiple true :name :merlin }
+          (select-options (map (fn [p] [(:name p) (:id p)]) good-players))])
+          [:br]
+          (submit-button { :class "btn btn-block btn-lg btn-primary" } "Choose")]))
+
+(defn watch-merlin-guess [evil-players]
+  (layout
+    [:div
+      [:h3 "Evil players:"]
+      (team-summary evil-players)]))
+
 (defn no-stage [game-state]
   (layout
     [:div "Unknown stage"]))

@@ -21,3 +21,8 @@
   (do
     (game-interface/quest id (:id active-user) (= "pass" (:vote (:params request))))
     (redirect (str "/game/" id))))
+
+(defn merlin [request id]
+  (do
+    (game-interface/quest id (:id active-user) (Integer/parseInt (:merlin (:params request))))
+    (redirect (str "/game/" id))))
