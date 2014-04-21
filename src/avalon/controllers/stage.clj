@@ -5,7 +5,9 @@
             [avalon.core :as core]))
 
 (defn open-game [game-state]
-  (stage/overview game-state true))
+  (if (core/is-playing? game-state active-user)
+    (stage/overview game-state false)
+    (stage/overview game-state true)))
 
 (defn propose-team [game-state]
   (let

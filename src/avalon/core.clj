@@ -65,6 +65,9 @@
 (defn max-players [state]
   (:num-players (:settings state)))
 
+(defn is-playing? [state user]
+  (some #(= (:id user) %) (:players state)))
+
 (defn is-good? [state player-id]
   (let [role (get (:roles state) player-id)]
     (some #(= role %) [:loyal-servant :merlin])))
