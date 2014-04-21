@@ -5,7 +5,6 @@
   (layout
     [:div
       [:div { :class "list-group" }
-      [:div { :class "list-group-item" :style "text-align:center; " } "Open Games"]
       (for [game current-games]
         [:a { :class "list-group-item" :href (str "/game/" (:id game)) }
           (:name (:settings game))
