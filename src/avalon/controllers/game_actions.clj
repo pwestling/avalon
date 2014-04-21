@@ -9,7 +9,7 @@
 
 (defn propose [request id]
   (do
-    (game-interface/choose-team id (:id active-user) (:team (:params request))))
+    (game-interface/choose-team id (:id active-user) (map #(Integer/parseInt %) (:team (:params request)))))
     (redirect (str "/game/" id)))
 
 (defn vote [request id]
