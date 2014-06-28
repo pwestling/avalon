@@ -11,7 +11,6 @@
   (let
     [game-state (game/find-game id)
      stage (game/get-stage game-state)]
-    (println stage)
     (case stage
       :open         (stage/open-game game-state)
       :propose-team (stage/propose-team game-state)
